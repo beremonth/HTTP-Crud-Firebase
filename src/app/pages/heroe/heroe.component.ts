@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HeroeModel } from '../../models/heroe.model';
 
 @Component({
   selector: 'app-heroe',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./heroe.component.css']
 })
 export class HeroeComponent implements OnInit {
+
+  // modelo de clase
+  heroe = new HeroeModel();
 
   constructor() { }
 
