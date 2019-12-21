@@ -24,7 +24,7 @@ export class HeroeComponent implements OnInit {
 
   // Funcion que responde el evento click del html
   // recibe como parametro el formulario incrustado en el html
-  guardar(form: NgForm)
+  guardar( form: NgForm )
   {
 
     // validamos que la propiedad invalid del formulario, sea true
@@ -33,13 +33,24 @@ export class HeroeComponent implements OnInit {
       return; // rompemos el flujo del formulario
     }
 
-    // propiedad invalid = false, continua el flujo
+    // actualizar registro
+    if (this.heroe.id)
+    { 
+      this.heroesService.actualizarHeroe(this.heroe)
+        .subscribe( respuestaHereo =>
+        {
+          console.log(respuestaHereo);
+        });
+    } // end actualizar
+
+    // crear registro
     else {
       this.heroesService.crearHeroe( this.heroe )
         .subscribe( respuestaHereo =>
         {
-          console.log( respuestaHereo );
+          console.log(respuestaHereo);
+          this.heroe = respuestaHereo;
         });
-    }
-  }
-}
+    } // end crear registro
+  } // end method guardar
+} // end class HeroeComponent

@@ -15,7 +15,7 @@ export class HeroesService {
   crearHeroe( heroe: HeroeModel )
   {
 
-    // modelo de heroe
+    // peticion post (crear), como body, mandamos el modelo de heroe
     return this.http.post(`${this.url}/heroes.json`, heroe)
       .pipe( 
         map( (resp: any) => {
@@ -23,5 +23,19 @@ export class HeroesService {
           return heroe;
         }));
   } // end method crearHeroe
+
+  actualizarHeroe( heroeM: HeroeModel )
+  {
+
+    // copia del model: HeroeModel, (rompemos referencia de JS)
+    const heroeTemp =
+    {
+      ...heroeM
+    };
+
+    delete heroeTemp.id;
+
+    return this.http.put(`${this.url}/heroes/${heroeM.id}.json`, heroeTemp);
+  } // end actualizarHeroe
 
 } // end class HeroesService
