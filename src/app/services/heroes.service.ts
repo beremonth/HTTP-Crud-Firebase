@@ -38,4 +38,38 @@ export class HeroesService {
     return this.http.put(`${this.url}/heroes/${heroeM.id}.json`, heroeTemp);
   } // end actualizarHeroe
 
+  obtenerHeroes()
+  { 
+    return this.http.get(`${this.url}/heroes.json`)
+      .pipe(
+        map(  this.crearArreglo ) // implicitamente la respuesta regresada por el servicio, es el que ejecuta la llamada a crearArreglo
+       );
+  } // end method getHeroes
+
+  private crearArreglo( heroesObj: object )
+  {
+    const miModeloHeroes: HeroeModel[] = [];
+    console.log(heroesObj);
+
+    // validación por si no tengo nada en la base de datos
+    if (heroesObj === null)
+    {
+      return [];
+    } // end if
+
+    // continua si hay registros en la base de datos
+    else
+    {
+      Object.keys(heroesObj).forEach(key =>
+      {
+        const heroe: HeroeModel = heroesObj[key]; // accediendo al contenido de cada Key en el objeto json
+        heroe.id = key;
+
+        miModeloHeroes.push( heroe );
+      });
+
+      return miModeloHeroes;
+    } // end else
+  } // end crearArreglo
+
 } // end class HeroesService
