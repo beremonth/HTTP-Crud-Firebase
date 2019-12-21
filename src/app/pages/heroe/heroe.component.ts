@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HeroeModel } from '../../models/heroe.model';
 import { NgForm } from '@angular/forms';
 import { HeroesService } from '../../services/heroes.service';
+import Swal from 'sweetalert2';
+import { Observable } from 'rxjs';
 
 
 
@@ -33,24 +35,37 @@ export class HeroeComponent implements OnInit {
       return; // rompemos el flujo del formulario
     }
 
+    Swal.fire({
+      title: 'Espere',
+      text: 'Guardando información', 
+      icon: 'info',
+      allowOutsideClick: false
+    });
+    Swal.showLoading();
+
+    let peticion: Observable<any>;
+
     // actualizar registro
     if (this.heroe.id)
-    { 
-      this.heroesService.actualizarHeroe(this.heroe)
-        .subscribe( respuestaHereo =>
-        {
-          console.log(respuestaHereo);
-        });
+    {
+      peticion = this.heroesService.actualizarHeroe(this.heroe);
     } // end actualizar
 
     // crear registro
     else {
-      this.heroesService.crearHeroe( this.heroe )
-        .subscribe( respuestaHereo =>
-        {
-          console.log(respuestaHereo);
-          this.heroe = respuestaHereo;
-        });
+      peticion = this.heroesService.crearHeroe( this.heroe );
     } // end crear registro
+
+
+    // muestra alerta hasta que se recibe una respuestaa
+    peticion.subscribe(res =>
+    { 
+      Swal.fire({
+        title: this.heroe.nombre,
+        text: 'Se actualizó correctamente',
+        icon: 'success'
+      });
+    }); // end subscribcion peticion
+
   } // end method guardar
 } // end class HeroeComponent
