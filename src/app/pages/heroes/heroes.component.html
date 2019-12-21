@@ -16,16 +16,20 @@
             <th scope="col">Nombre</th>
             <th scope="col">Poder</th>
             <th scope="col">Vivo</th>
-            <th scope="col">Tools</th>
+            <th scope="col">Acciones</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>@mdo</td>
+        <tr *ngFor="let heroe of miHeroeModel; let i = index">
+            <th scope="row"> {{ i + 1 }} </th>
+            <td> {{ heroe.nombre }} </td>
+            <td> {{ heroe.poder }} </td>
+            <td>
+
+                <label class="badge badge-success" *ngIf=" heroe.vivo "> Vivo </label>
+                <label class="badge badge-warning" *ngIf=" !heroe.vivo "> Muerto </label>
+            </td>
+            <td> Acciones </td>
         </tr>
     </tbody>
 </table>
