@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroeModel } from '../../models/heroe.model';
 import { NgForm } from '@angular/forms';
+import { HeroesService } from '../../services/heroes.service';
 
 
 
@@ -14,7 +15,7 @@ export class HeroeComponent implements OnInit {
   // modelo de clase
   heroe = new HeroeModel();
 
-  constructor()
+  constructor( private heroesService: HeroesService  )
   { 
   }
 
@@ -34,8 +35,11 @@ export class HeroeComponent implements OnInit {
 
     // propiedad invalid = false, continua el flujo
     else {
-      console.log(form);
-      console.log(this.heroe);
+      this.heroesService.crearHeroe( this.heroe )
+        .subscribe( respuestaHereo =>
+        {
+          console.log( respuestaHereo );
+        });
     }
   }
 }
