@@ -24,6 +24,7 @@ export class HeroesService {
         }));
   } // end method crearHeroe
 
+
   actualizarHeroe( heroeM: HeroeModel )
   {
 
@@ -45,6 +46,11 @@ export class HeroesService {
         map(  this.crearArreglo ) // implicitamente la respuesta regresada por el servicio, es el que ejecuta la llamada a crearArreglo
        );
   } // end method getHeroes
+
+  obtenerHeroe( id: string )
+  {
+    return this.http.get(`${this.url}/heroes/${ id }.json`);
+  } // end obtenerHeroe
 
   private crearArreglo( heroesObj: object )
   {

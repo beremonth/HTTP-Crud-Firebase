@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { HeroeModel } from '../../models/heroe.model';
+import { ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { HeroesService } from '../../services/heroes.service';
-import Swal from 'sweetalert2';
 import { Observable } from 'rxjs';
+import Swal from 'sweetalert2';
+
+import { HeroeModel } from '../../models/heroe.model';
+import { HeroesService } from '../../services/heroes.service';
 
 
 
@@ -17,12 +19,28 @@ export class HeroeComponent implements OnInit {
   // modelo de clase
   heroe = new HeroeModel();
 
-  constructor( private heroesService: HeroesService  )
+  constructor( private miHeroesService: HeroesService,  private miActivatedRoute: ActivatedRoute )
   { 
   }
 
-  ngOnInit() {
-  }
+  ngOnInit()
+  {
+    const id = this.miActivatedRoute.snapshot.paramMap.get('id');
+    
+    if ( id !== 'nuevo' )
+    { 
+      this.miHeroesService.obtenerHeroe(id)
+        .subscribe( (resp: HeroeModel) => {
+          
+          // asignación de valores para la pantalla de mostrar superheore
+          this.heroe = resp;
+          this.heroe.id = id;
+
+        });
+    } // end if
+
+
+  } // end ngOnInit
 
   // Funcion que responde el evento click del html
   // recibe como parametro el formulario incrustado en el html
@@ -48,12 +66,12 @@ export class HeroeComponent implements OnInit {
     // actualizar registro
     if (this.heroe.id)
     {
-      peticion = this.heroesService.actualizarHeroe(this.heroe);
+      peticion = this.miHeroesService.actualizarHeroe(this.heroe);
     } // end actualizar
 
     // crear registro
     else {
-      peticion = this.heroesService.crearHeroe( this.heroe );
+      peticion = this.miHeroesService.crearHeroe( this.heroe );
     } // end crear registro
 
 
