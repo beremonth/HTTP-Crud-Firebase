@@ -11,7 +11,12 @@ export class HeroesService {
   private url = 'https://crud-heroes-06.firebaseio.com';
 
   constructor( private http: HttpClient ) { }
-  
+
+  borrarHeroe( id )
+  { 
+    return this.http.delete( `${this.url}/heroes/${id}/.json` )
+  } // end method borrarHeroe
+
   crearHeroe( heroe: HeroeModel )
   {
 
@@ -24,6 +29,13 @@ export class HeroesService {
         }));
   } // end method crearHeroe
 
+  obtenerHeroes()
+  { 
+    return this.http.get(`${this.url}/heroes.json`)
+      .pipe(
+        map(  this.crearArreglo ) // implicitamente la respuesta regresada por el servicio, es el que ejecuta la llamada a crearArreglo
+       );
+  } // end method getHeroes
 
   actualizarHeroe( heroeM: HeroeModel )
   {
@@ -39,43 +51,35 @@ export class HeroesService {
     return this.http.put(`${this.url}/heroes/${heroeM.id}.json`, heroeTemp);
   } // end actualizarHeroe
 
-  obtenerHeroes()
-  { 
-    return this.http.get(`${this.url}/heroes.json`)
-      .pipe(
-        map(  this.crearArreglo ) // implicitamente la respuesta regresada por el servicio, es el que ejecuta la llamada a crearArreglo
-       );
-  } // end method getHeroes
-
-  obtenerHeroe( id: string )
+  obtenerHeroe(id: string)
   {
-    return this.http.get(`${this.url}/heroes/${ id }.json`);
+    return this.http.get(`${this.url}/heroes/${id}.json`);
   } // end obtenerHeroe
 
-  private crearArreglo( heroesObj: object )
+  private crearArreglo(heroesObj: object)
   {
     const miModeloHeroes: HeroeModel[] = [];
     console.log(heroesObj);
 
     // validación por si no tengo nada en la base de datos
-    if (heroesObj === null)
-    {
+    if (heroesObj === null) {
       return [];
     } // end if
 
     // continua si hay registros en la base de datos
-    else
-    {
+    else {
       Object.keys(heroesObj).forEach(key =>
       {
         const heroe: HeroeModel = heroesObj[key]; // accediendo al contenido de cada Key en el objeto json
         heroe.id = key;
 
-        miModeloHeroes.push( heroe );
+        miModeloHeroes.push(heroe);
       });
 
       return miModeloHeroes;
     } // end else
   } // end crearArreglo
+
+  
 
 } // end class HeroesService
