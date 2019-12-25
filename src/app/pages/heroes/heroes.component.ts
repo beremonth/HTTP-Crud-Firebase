@@ -12,13 +12,19 @@ export class HeroesComponent implements OnInit
 {
   
   miHeroeModel: HeroeModel[] = [];
+  datosRecibido: boolean;
+
 
   constructor( private miHeroesService: HeroesService ) { } // end constructor
 
   ngOnInit()
   {
+    this.datosRecibido = true;
     this.miHeroesService.obtenerHeroes()
-      .subscribe( resp => this.miHeroeModel = resp );
+      .subscribe( resp => {
+        this.miHeroeModel = resp;
+        this.datosRecibido = false;
+      });
   } // end ngOnInit
 
   borrarHeroe( heroe: HeroeModel, i: number )
